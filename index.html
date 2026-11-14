@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rosario Balladares</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout: a hero sentence with coloured pills (her reference), a grid of
+   numbered project covers, a full-screen case that opens on click, contact.
+   Single warm look on purpose: cream paper, plum ink, her orange and lilac. */
+:root {
+  --paper: #F7F0E4;     /* cream ground */
+  --paper-2: #EFE5D4;   /* a shade deeper: image wells, hovers */
+  --card: #FFFDF8;      /* the white pill */
+  --ink: #2B1726;       /* plum-black text */
+  --ink-soft: #6E5A66;  /* secondary text */
+  --plum: #6A2A5C;      /* from her deck */
+  --orange: #E8511E;    /* from her RB logo, approximate */
+  --lilac: #C4B5DC;     /* from her RB logo, approximate */
+  --line: #DCCDBA;
+  --display: "Lora", "Iowan Old Style", Georgia, serif;
+  --text: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--text); overflow-x: hidden; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+.wrap {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  max-width: 1440px; margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .wrap { padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px)); }
+}
+.label { font: 600 12px/1.2 var(--text); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* ---------- top bar ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0; }
+.logo { display: block; height: 32px; width: auto; flex: none; }
+.brand .label { color: var(--plum); white-space: nowrap; }
+.bar-right { display: flex; align-items: center; gap: 20px; }
+.bar nav { display: flex; gap: 20px; }
+.bar nav a { font-weight: 500; font-size: 15px; text-decoration: none; }
+.bar nav a:hover { color: var(--orange); }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 99px; padding: 2px; background: var(--card); }
+.lang button { border: 0; background: none; border-radius: 99px; padding: 5px 10px; font-size: 13px; font-weight: 600; letter-spacing: .06em; cursor: pointer; color: var(--ink-soft); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+@media (max-width: 640px) {
+  .bar nav, .brand .label { display: none; }
+}
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; }
+.glow {
+  position: absolute; width: 44vmax; height: 44vmax; left: 0; top: 0; border-radius: 50%;
+  background: radial-gradient(circle, var(--lilac) 0%, color-mix(in srgb, var(--lilac) 35%, transparent) 40%, transparent 70%);
+  pointer-events: none; opacity: .7; transform: translate(45vw, -8vmax); will-change: transform;
+}
+.hero .wrap { position: relative; padding-block: 48px 64px; display: grid; gap: 28px; }
+.status { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-soft); }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 20%, transparent); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--orange) 0%, transparent); } }
+.hero h1 {
+  margin: 0; font: 400 clamp(38px, 6.2vw, 92px)/1.14 var(--display);
+  letter-spacing: -.025em; max-width: 15em;
+}
+.hero h1 .line { display: block; }
+.pill {
+  display: inline-block; vertical-align: .08em;
+  font: 500 .6em/1 var(--display); letter-spacing: -.01em;
+  padding: .32em .62em .38em; border-radius: 99px; margin-inline: .08em;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+.pill.name { background: var(--card); box-shadow: 0 10px 30px -14px rgba(43, 23, 38, .35); }
+.pill.dark { background: var(--plum); color: var(--paper); }
+.pill.hot { background: var(--orange); color: #fff; }
+.pill.out { border: 1.5px solid var(--ink); }
+.hero h1 em { font-style: italic; color: var(--plum); }
+.hero .sub { margin: 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); color: var(--ink-soft); }
+.cta {
+  justify-self: start; display: inline-flex; align-items: center; gap: 14px;
+  background: var(--lilac); border-radius: 99px; padding: 8px 8px 8px 22px;
+  text-decoration: none; font-weight: 600;
+  box-shadow: 0 12px 30px -14px color-mix(in srgb, var(--plum) 70%, transparent);
+  transition: transform .2s;
+}
+.cta span { width: 36px; height: 36px; border-radius: 50%; background: var(--card); display: grid; place-items: center; transition: transform .2s; }
+.cta:hover { transform: translateY(-2px); }
+.cta:hover span { transform: rotate(45deg); }
+@media (min-width: 900px) { .hero .wrap { padding-block: 88px 96px; gap: 32px; } }
+
+/* ---------- work grid ---------- */
+.work { padding-block: 24px 80px; display: grid; gap: 28px; }
+.work-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--ink); padding-bottom: 12px; }
+.work-head h2 { margin: 0; font: 400 clamp(30px, 3.6vw, 52px)/1 var(--display); letter-spacing: -.02em; }
+.grid { display: grid; gap: 40px 28px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .grid { grid-template-columns: 1fr 1fr; } }
+.card { all: unset; cursor: pointer; display: grid; gap: 14px; min-width: 0; }
+.card:focus-visible { outline: 2px solid var(--orange); outline-offset: 6px; border-radius: 8px; }
+.cover { position: relative; aspect-ratio: 4 / 3; max-width: 100%; border-radius: 8px; overflow: hidden; background: var(--paper-2); }
+.cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+.cover .open {
+  position: absolute; right: 14px; bottom: 14px; background: var(--card); border-radius: 99px;
+  padding: 8px 14px; font-size: 14px; font-weight: 600; opacity: 0; transform: translateY(8px);
+  transition: opacity .25s, transform .25s;
+}
+.card:hover .cover img, .card:focus-visible .cover img { transform: scale(1.04); }
+.card:hover .open, .card:focus-visible .open { opacity: 1; transform: none; }
+.card-meta { display: grid; grid-template-columns: 3.2ch 1fr; gap: 4px 12px; align-items: baseline; }
+.card-meta .num { font: 600 13px/1 var(--text); color: var(--orange); font-variant-numeric: tabular-nums; }
+.card-meta h3 { margin: 0; font: 500 clamp(24px, 2.4vw, 32px)/1.1 var(--display); letter-spacing: -.015em; }
+.card-meta p { grid-column: 2; margin: 0; font-size: 15px; color: var(--ink-soft); }
+.motion-cover { background: var(--plum); display: grid; place-content: center; text-align: center; color: var(--paper); }
+.motion-cover .word { font: italic 400 clamp(36px, 5vw, 64px)/1 var(--display); }
+.motion-cover .orbit { position: absolute; width: 34%; aspect-ratio: 1; border-radius: 50%; border: 1.5px solid var(--orange); left: 50%; top: 50%; animation: orbit 9s linear infinite; }
+@keyframes orbit { from { transform: translate(-50%, -50%) rotate(0) translateX(55%); } to { transform: translate(-50%, -50%) rotate(360deg) translateX(55%); } }
+
+/* ---------- case view ---------- */
+dialog.case {
+  width: 100%; max-width: 100%; height: 100%; max-height: 100%; margin: 0; padding: 0; border: 0;
+  background: var(--paper); color: var(--ink); overflow-y: auto; overscroll-behavior: contain;
+}
+dialog.case::backdrop { background: var(--plum); }
+dialog.case[open] { animation: rise .45s cubic-bezier(.2,.8,.2,1); }
+@keyframes rise { from { transform: translateY(24px); opacity: .4; } }
+.case-bar { position: sticky; top: 0; z-index: 2; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+.case-bar .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 12px; }
+.pill-btn { border: 1px solid var(--ink); background: var(--card); border-radius: 99px; padding: 8px 16px; font-weight: 600; font-size: 14px; cursor: pointer; }
+.pill-btn:hover { background: var(--ink); color: var(--paper); }
+.case-body { padding-block: 40px 80px; display: grid; gap: 48px; }
+.case-head { display: grid; gap: 18px; }
+.case-head .kicker { display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+.case-head .kicker .num { font: 600 13px/1 var(--text); color: var(--orange); }
+.case-head h2 { margin: 0; font: 400 clamp(40px, 6vw, 88px)/1.02 var(--display); letter-spacing: -.03em; max-width: 14em; text-wrap: balance; }
+.case-head h2 em { font-style: italic; color: var(--plum); }
+.overview { display: grid; gap: 28px; }
+.overview .paras { display: grid; gap: 14px; max-width: 60ch; font-size: clamp(17px, 1.4vw, 20px); }
+.overview .paras p { margin: 0; }
+.facts { display: grid; gap: 16px; align-content: start; margin: 0; }
+.facts div { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 4px; }
+.facts dt { font: 600 12px/1.2 var(--text); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.facts dd { margin: 0; }
+@media (min-width: 900px) { .overview { grid-template-columns: 7fr 4fr; gap: 64px; } }
+.shot { margin: 0; border-radius: 8px; overflow: hidden; background: var(--paper-2); }
+.shot img, .shot video { display: block; width: 100%; height: auto; }
+.section { display: grid; gap: 20px; border-top: 1px solid var(--ink); padding-top: 24px; }
+.section .label { color: var(--orange); }
+.section h3 { margin: 0; font: 400 clamp(30px, 3.4vw, 48px)/1.08 var(--display); letter-spacing: -.02em; max-width: 18em; }
+.section .paras { display: grid; gap: 12px; max-width: 62ch; }
+.section .paras p { margin: 0; }
+.items { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+.item { background: var(--card); border-radius: 8px; padding: 18px; display: grid; gap: 8px; align-content: start; }
+.item .k { font: 600 12px/1.2 var(--text); letter-spacing: .14em; text-transform: uppercase; color: var(--plum); }
+.item .h { font: 500 19px/1.3 var(--display); }
+.item p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+.outcome { background: var(--plum); color: var(--paper); border-radius: 8px; padding: clamp(24px, 4vw, 48px); display: grid; gap: 10px; }
+.outcome .label { color: var(--lilac); }
+.outcome p { margin: 0; font: 400 clamp(24px, 2.8vw, 38px)/1.25 var(--display); max-width: 30ch; }
+.gallery { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .gallery { grid-template-columns: 1fr 1fr; } .gallery .shot.wide { grid-column: 1 / -1; } }
+.next { all: unset; cursor: pointer; display: grid; gap: 6px; border-top: 1px solid var(--ink); padding-top: 20px; }
+.next .h { font: 400 clamp(32px, 4.4vw, 64px)/1 var(--display); letter-spacing: -.02em; }
+.next:hover .h { color: var(--orange); font-style: italic; }
+
+/* ---------- contact ---------- */
+.contact { background: var(--plum); color: var(--paper); }
+.contact .wrap { padding-block: 72px 48px; display: grid; gap: 40px; }
+.contact .label { color: var(--lilac); }
+.contact h2 { margin: 0; font: 400 clamp(48px, 9vw, 140px)/.95 var(--display); letter-spacing: -.035em; }
+.contact h2 em { color: var(--lilac); }
+.links { display: grid; border-top: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); }
+.links a {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-block: 18px; text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--paper) 30%, transparent); font: 400 clamp(22px, 2.6vw, 34px)/1.1 var(--display);
+  transition: padding .2s, color .2s;
+}
+.links a span:last-child { font: 500 14px/1 var(--text); color: var(--lilac); overflow-wrap: anywhere; text-align: right; }
+.links a:hover { color: var(--orange); padding-left: 8px; }
+.contact .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--lilac); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .glow, .pill { transform: none !important; }
+  .status::before, .motion-cover .orbit, dialog.case[open] { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Rosario Balladares">
+      <svg class="logo" aria-hidden="true" viewBox="0 0 612.46 427.63"><path fill="#e94f1c" stroke="#e94f1c" stroke-width="3" stroke-miterlimit="10" d="M348.84,426.13c-3.05,0-6.050-.38-8.97-1.15-2.9.76-5.86,1.14-8.85,1.14h-145.49c-4.94,0-9.850-1.050-14.36-3.04-4.5,2-9.37,3.04-14.42,3.04H36.99c-11.03,0-21.6-5.24-28.26-14.03-6.68-8.78-8.89-20.37-5.93-30.99.81-2.87,1.91-7.4,3.4-13.84q1.76-7.63,6.22-26.46l2.93-12.37c4.36-18.44,8.02-36.59,10.87-53.94,3.02-18.29,6.4-39.37,10.06-62.65,3.44-21.85,5.35-41.95,5.66-59.77.29-18.35-.26-35.53-1.64-51.05-.86-9.69-2.89-17.79-5.62-22.53C16.18,77.29,1.5,61.86,1.5,43.07v-6.08C1.5,17.42,17.42,1.5,36.99,1.5h193c14.11,0,27.5,1.55,39.87,4.61,5.3-3,11.32-4.61,17.46-4.61h168.42c50.86,0,89.21,19.13,113.99,56.86,20.44,30.55,25.68,63.49,15.52,97.84-5.15,17.75-13.85,32.63-25.93,44.41q1.58,1.07,3.19,2.18c8.95,6.08,16.51,13.19,22.41,21.08,4.55,6.050,8.89,12.88,12.9,20.28,4.93,9.050,8.46,19.18,10.5,30.09,1.75,9.4,2.64,19.66,2.64,30.51,0,17.39-3.02,33.56-8.97,48.08-6.16,15.01-14.46,27.5-24.66,37.11-9.48,8.97-20.87,16.41-33.83,22.1-11.85,5.14-23.82,8.83-35.64,11-11.3,2.05-23.23,3.09-35.46,3.09H348.84Z"/><path fill="#fff" d="M578.16,280.75c-1.34-7.21-3.62-13.81-6.81-19.68q-4.79-8.84-10.1-15.93c-3.53-4.7-8.24-9.11-14.15-13.13-5.87-4.04-11.36-7.59-16.4-10.6q-7.6-4.54-19.95-9.61t-21.48-8.32-24.02-8.85-24.98-9.61q40.92,14.69,70.72,6.08,34.85-10.11,44.96-44.98,10.61-35.85-11.1-68.19-26.8-40.89-84.38-40.94h-168.42c17.3,7.48,31.38,19.43,42.07,35.76,2.93,4.37,41.29,72.54,72.29,129.45,32.01,58.61,80.08,75.02,85.33,108.15,7.32,46.23-42.36,56.6-85.83,56.6h-18.69c0-29.95-2.44-44.43-7.34-78.6q-7.31-51.29-15.9-88.19-7.630-32.58-14.22-68.12c-.59,5.54-1.73,11.15-3.38,16.78-7.67,26.07-24.78,43.18-50.87,50.85-1.9.56-3.84,1.06-5.8,1.51,8,3.48,14.17,6.37,18.86,8.8,4.59,2.35,10.05,5.54,16.63,9.75,6.7,4.28,11.93,8.33,16.02,12.42,3.88,3.88,7.9,8.52,11.92,13.82,4.43,5.75,7.81,11.93,10.01,18.29,1.97,5.7,3.69,12.23,5.16,19.43,1.44,7.29,2.18,15.24,2.18,23.59,0,17.08-1.59,33.08-4.76,47.49-3.24,14.83-6.5,25.22-9.98,31.75l-2.18,4.12h123.56q15.16,0,29.06-2.51c9.27-1.7,18.5-4.57,27.78-8.59q13.910-6.1,23.75-15.43c6.58-6.2,11.95-14.48,16.16-24.75q6.32-15.4,6.32-34.61C580.2,296.02,579.51,287.99,578.16,280.75ZM405.39,150.4q-19.2-17.39-33.34-38.38-14.13-20.94-23.24-40.65c-6.03-13.15-8.75-22.57-8.06-28.29q25.76,0,48.98,5.56,58.59,14.12,87.4,55.55,21.22,30.81,11.62,53.05-10.12,23.21-47.96,14.65C430,169.21,418.21,162.02,405.39,150.4Z"/><path fill="#fff" d="M342.47,285.57q-2.05-10.1-4.82-18.2c-1.86-5.37-4.71-10.62-8.59-15.67q-5.78-7.57-11.1-12.86t-14.41-11.13c-6.05-3.85-11.35-6.99-15.92-9.33q-6.8-3.56-18.43-8.59c-7.73-3.37-14.33-5.99-19.69-7.85-5.39-1.82-12.73-4.53-21.97-8.07q-13.91-5.31-22.48-8.85,40.91,14.68,71.21,5.57,34.37-10.1,44.46-44.46,10.61-35.86-11.1-68.19-26.79-40.92-84.37-40.95H32.26v6.08q16.69,0,26.54,14.64,9.84,14.68,12.12,40.17,2.27,25.51,1.77,54.81-.51,29.32-6.08,64.66-5.56,35.4-10.1,62.92-4.53,27.52-11.35,56.32-6.81,28.8-9.11,38.63c-1.51,6.57-2.76,11.73-3.79,15.41h119.75q0-44.94-7.33-96.98-7.32-52.05-16.18-90.42-8.82-38.4-15.89-79.84c-4.74-27.62-4.14-33.81-4.14-51.33,1.68,11.44,26.42,55.38,35.7,70.53q13.91,22.73,29.04,48.74,15.15,26.02,25.51,51.53,10.36,25.55,14.92,50.79,4.54,25.25-3.53,50.27-8.09,25-29.31,46.71h145.49l4.54-8.59q4.58-8.56,9.1-29.3,4.54-20.72,4.54-45.450Q344.47,295.69,342.47,285.57ZM159.32,139.57q-25-27.31-40.15-55.84-15.15-28.510-13.64-40.66,25.25,0,48.99,5.56,58.6,14.13,87.4,55.56,21.23,30.81,11.61,53.04-10.1,23.24-47.99,14.67Q184.36,166.85,159.32,139.57Z"/></svg>
+      <span class="label" data-t="tagline"></span>
+    </a>
+    <div class="bar-right">
+      <nav aria-label="Secciones"><a href="#trabajos" data-t="navWork"></a><a href="#contacto" data-t="navContact"></a></nav>
+      <div class="lang" role="group" aria-label="Idioma / Language">
+        <button type="button" id="lang-es" data-lang="es" aria-pressed="true">ES</button>
+        <button type="button" id="lang-en" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="glow" id="glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="status" data-t="status"></span>
+      <h1 id="hero-title"></h1>
+      <p class="sub" data-t="sub"></p>
+      <a class="cta" href="#contacto"><b data-t="cta" style="font-weight:600"></b><span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <section class="work wrap" id="trabajos">
+    <div class="work-head"><h2 data-t="workTitle"></h2><span class="label" id="work-count"></span></div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer class="contact" id="contacto">
+  <div class="wrap">
+    <span class="label" data-t="navContact"></span>
+    <h2 id="contact-title"></h2>
+    <div class="links">
+      <a href="mailto:roballadares.dg@gmail.com"><span>Email</span><span>roballadares.dg@gmail.com</span></a>
+      <a href="https://www.linkedin.com/in/rosario-balladares/" target="_blank" rel="noopener"><span>LinkedIn</span><span>in/rosario-balladares</span></a>
+      <a href="https://www.behance.net/roballadares" target="_blank" rel="noopener"><span>Behance</span><span>/roballadares</span></a>
+      <a id="cv-link" href="cv/cv-es.pdf" target="_blank" rel="noopener"><span>CV</span><span data-t="cvNote"></span></a>
+    </div>
+    <div class="foot"><span>Rosario Balladares · <span data-t="tagline"></span></span><span>Branding · Editorial · Motion</span></div>
+  </div>
+</footer>
+
+<dialog class="case" id="case" aria-labelledby="case-title">
+  <div class="case-bar"><div class="wrap">
+    <span class="label" id="case-crumb"></span>
+    <button type="button" class="pill-btn" id="case-close"></button>
+  </div></div>
+  <div class="case-body wrap" id="case-body"></div>
+</dialog>
+
+<script>
+/* Images per project, from the Figma deck (page 5102:2), one piece per file. */
+const N = { '01': 5, '02': 3, '03': 6, '04': 4, '05': 4, '06': 5, '07': 1, '08': 5, '09': 5, '10': 7 };
+const IMGS = Object.fromEntries(Object.entries(N).map(([k, n]) =>
+  [k, Array.from({ length: n }, (_, i) => `img/${k}/${i + 1}.jpg`)]));
+
+const UI = {
+  es: {
+    tagline: "Diseñadora gráfica", navWork: "Trabajos", navContact: "Contacto", cvNote: "PDF en español", cv: "cv/cv-es.pdf",
+    status: "Disponible para proyectos",
+    hero: `<span class="line">¡Hola! Soy <span class="pill name">Rosario Balladares</span></span>
+      <span class="line"><span class="pill dark">Diseñadora gráfica</span> <span class="pill hot">Diseñadora de marca</span></span>
+      <span class="line">Desde <span class="pill out">Argentina</span></span>
+      <span class="line">Convierto ideas en soluciones visuales <em>claras y escalables.</em></span>`,
+    sub: "Diseño sistemas de marca, experiencias digitales y presentaciones que comunican con claridad y propósito.",
+    cta: "Escribime", workTitle: "Trabajos seleccionados", projects: "proyectos",
+    open: "Ver caso", close: "Cerrar ✕", next: "Siguiente proyecto",
+    role: "Mi rol", team: "Equipo", audience: "Audiencia", formats: "Formatos", field: "Rubro", outcome: "Resultado",
+    contact: "Hablemos de<br>tu <em>marca</em>."
+  },
+  en: {
+    tagline: "Graphic designer", navWork: "Work", navContact: "Contact", cvNote: "PDF in English", cv: "cv/cv-en.pdf",
+    status: "Available for projects",
+    hero: `<span class="line">Hi! I'm <span class="pill name">Rosario Balladares</span></span>
+      <span class="line"><span class="pill dark">Graphic Designer</span> <span class="pill hot">Brand Designer</span></span>
+      <span class="line">Based in <span class="pill out">Argentina</span></span>
+      <span class="line">Turning ideas into <em>clear, scalable</em> visual solutions.</span>`,
+    sub: "I design brand systems, digital experiences and presentations that communicate with clarity and purpose.",
+    cta: "Get in touch", workTitle: "Selected work", projects: "projects",
+    open: "View case", close: "Close ✕", next: "Next project",
+    role: "My role", team: "Team", audience: "Audience", formats: "Formats", field: "Field", outcome: "Outcome",
+    contact: "Let's talk about<br>your <em>brand</em>."
+  }
+};
+
+/* Copy for the first five comes from Rosario's document
+   Portfolio_Casos_Rosario_Balladares_ES_EN.docx. Projects marked draft: true
+   carry a short text written from her deck slides and translated by Claude,
+   waiting for her review. */
+const P = [
+  { id: "bioferia", client: "Bioferia", img: "03",
+    es: { field: "Evento sustentable", short: "Audit visual · Web · Redes",
+      title: "Evolución de identidad visual y diseño digital",
+      overview: ["Bioferia contaba con una identidad reconocible, pero presentaba inconsistencias entre sus distintos elementos y aplicaciones.",
+        "Realizamos un audit visual integral para identificar oportunidades de mejora y evolucionar el sistema hacia un lenguaje más coherente, contemporáneo y flexible."],
+      facts: [["role", "Audit visual · Desarrollo visual · Diseño web · Diseño para redes sociales"], ["team", "Directora de Arte · 2 Diseñadoras Gráficas"]],
+      sections: [
+        { n: "02 — Evolución visual", title: "Refinamiento del lenguaje visual",
+          paras: ["A partir del audit, se refinó la identidad en sus principales componentes. El sistema actualizado incorporó una jerarquía tipográfica más clara, una paleta cromática más enfocada, una iconografía simplificada, un lenguaje de ilustración más flexible y criterios de layout más sólidos.",
+            "El objetivo no fue crear una identidad nueva, sino fortalecer la existente y facilitar su aplicación consistente en distintos formatos y contextos."],
+          items: [["Tipografía", "Un sistema tipográfico más consistente y contemporáneo."], ["Color", "Una paleta más enfocada y con mayor contraste."], ["Iconografía", "Un lenguaje visual simplificado y unificado."], ["Ilustración", "Un recurso gráfico más protagonista y flexible."]] },
+        { n: "03 — Aplicaciones digitales", title: "Del sistema a lo digital",
+          paras: ["Aplicamos el nuevo lenguaje visual en web y redes sociales, desarrollando composiciones flexibles y coherentes para distintos tipos de contenido.",
+            "El sistema permitió adaptar la identidad a diferentes formatos y contextos, manteniendo una presencia visual consistente."],
+          items: [["Web", "Diseño y adaptación de la identidad actualizada al sitio web."], ["Redes sociales", "Desarrollo de piezas y composiciones para distintos contenidos y campañas."]] }] },
+    en: { field: "Sustainable event", short: "Visual audit · Web · Social media",
+      title: "Visual identity evolution & digital design",
+      overview: ["Bioferia had a recognizable visual identity, but presented inconsistencies across its different elements and applications.",
+        "We conducted a comprehensive visual audit to identify opportunities for improvement and evolve the system into a more cohesive, contemporary and flexible visual language."],
+      facts: [["role", "Visual Audit · Visual Development · Web Design · Social Media Design"], ["team", "Art Director · 2 Graphic Designers"]],
+      sections: [
+        { n: "02 — Visual evolution", title: "Refining the visual language",
+          paras: ["Based on the audit, the identity was refined across its main components. The updated system introduced a clearer typographic hierarchy, a more focused color palette, simplified iconography, a more flexible illustration language and stronger layout principles.",
+            "The objective was not to create a new identity, but to strengthen the existing one and make it easier to apply consistently across different formats and contexts."],
+          items: [["Typography", "A more consistent and contemporary typographic system."], ["Color", "A more focused palette with stronger contrast."], ["Iconography", "A simplified and unified visual language."], ["Illustration", "A more prominent and flexible graphic resource."]] },
+        { n: "03 — Digital applications", title: "From the system to digital",
+          paras: ["We applied the updated visual language across web and social media, developing flexible and cohesive compositions for different types of content.",
+            "The system allowed the identity to adapt to different formats and contexts while maintaining a consistent visual presence."],
+          items: [["Web", "Design and adaptation of the updated identity across the website."], ["Social media", "Development of visual pieces and compositions for different types of content and campaigns."]] }] } },
+
+  { id: "aac", client: "AAC", img: "01",
+    es: { field: "Donaciones", short: "Audit visual · Layouts · Iconografía",
+      title: "Identidad visual y sistema modular",
+      overview: ["AAC necesitaba modernizar su identidad visual y generar mayor consistencia entre sus comunicaciones impresas, digitales y editoriales.",
+        "Como parte del equipo de diseño, participé en el desarrollo de un sistema visual más cohesivo y adaptable, comenzando por un audit de la identidad existente y explorando nuevas soluciones para layouts e iconografía."],
+      facts: [["role", "Audit visual · Exploración visual · Diseño de layouts · Iconografía"], ["team", "2 diseñadoras gráficas"]],
+      sections: [
+        { n: "02 — Construcción del sistema", title: "Construcción del sistema",
+          paras: ["El audit y la exploración visual dieron lugar a un sistema más estructurado, con layouts más claros, elementos reutilizables y un lenguaje iconográfico consistente."],
+          items: [["Layout", "De composiciones fragmentadas a una estructura más modular.", "Desarrollamos jerarquías más claras y composiciones flexibles capaces de adaptarse a distintos formatos."],
+            ["Iconografía", "Un lenguaje visual más claro y cohesivo.", "Exploré un nuevo sistema de iconos basado en formas simples, proporciones consistentes y un lenguaje reconocible."],
+            ["Exploración visual", "Exploración de color, composición y recursos gráficos.", "Desarrollamos distintas aproximaciones visuales para equilibrar el carácter institucional de la marca con una presencia más contemporánea y digital."]] }],
+      outcome: "Un sistema visual más cohesivo y adaptable a múltiples puntos de contacto." },
+    en: { field: "Charitable giving", short: "Visual audit · Layouts · Iconography",
+      title: "Visual identity & modular design system",
+      overview: ["AAC needed to modernize its visual identity and create greater consistency across print, digital and editorial communication.",
+        "As part of the design team, I contributed to the development of a more cohesive and adaptable visual system, starting with an audit of the existing identity and exploring new approaches to layout and iconography."],
+      facts: [["role", "Visual Audit · Visual Exploration · Layout Design · Iconography"], ["team", "2 Graphic Designers"]],
+      sections: [
+        { n: "02 — Building the system", title: "Building the system",
+          paras: ["The audit and visual exploration led to a more structured system, with clearer layouts, reusable elements and a consistent iconographic language."],
+          items: [["Layout", "From fragmented compositions to a more modular structure.", "We developed clearer hierarchies and flexible compositions that could adapt across different formats."],
+            ["Iconography", "A clearer and more cohesive visual language.", "I explored a new iconographic system based on simple forms, consistent proportions and a recognizable visual language."],
+            ["Visual exploration", "Exploring color, composition and graphic resources.", "We explored different visual approaches to balance the brand's institutional character with a more contemporary and digital presence."]] }],
+      outcome: "A more cohesive and adaptable visual system across multiple touchpoints." } },
+
+  { id: "oneaxiom", client: "OneAxiom", img: "04",
+    es: { field: "Ciberseguridad", short: "Logo · Identidad visual",
+      title: "Identidad de marca",
+      overview: ["OneAxiom es una startup de ciberseguridad enfocada en el monitoreo, la detección y la respuesta frente a amenazas críticas.",
+        "El proyecto partió desde cero y requirió desarrollar una identidad visual concisa que acompañara el lanzamiento digital de la empresa."],
+      facts: [["role", "Diseño de logo · Identidad visual · Aplicaciones gráficas"], ["team", "Dirección de Arte · Diseño Gráfico"]],
+      sections: [{ n: "02 — Concepto", title: "La O y la A, una sola forma",
+        paras: ["El logotipo fue diseñado integrando las letras “O” y “A”, creando una conexión visual que representa protección y unidad dentro de un sistema.",
+          "La identidad se extendió mediante una paleta cromática de carácter tecnológico, recursos gráficos y un sistema de iconos seleccionado para alinearse con el lenguaje visual de la marca."] }],
+      outcome: "Una identidad clara y profesional, preparada para su implementación digital." },
+    en: { field: "Cybersecurity", short: "Logo · Visual identity",
+      title: "Brand identity",
+      overview: ["OneAxiom is a cybersecurity startup focused on monitoring, detection and response to critical threats.",
+        "The project started from scratch and required a concise visual identity that could support the company's digital launch."],
+      facts: [["role", "Logo Design · Visual Identity · Graphic Applications"], ["team", "Art Direction · Graphic Design"]],
+      sections: [{ n: "02 — Concept", title: "The O and the A, one shape",
+        paras: ["The logotype was designed by integrating the “O” and “A”, creating a visual connection that represents protection and unity within a system.",
+          "The identity was extended through a technology-oriented color palette, graphic elements and an icon set selected to align with the brand's visual language."] }],
+      outcome: "A clear, professional identity ready for digital implementation." } },
+
+  { id: "aac-starter", client: "AAC Starter", img: "02",
+    es: { field: "Donaciones · jóvenes", short: "Extensión de marca · Identidad",
+      title: "Extensión de marca para una audiencia joven",
+      overview: ["Luego del rebranding de AAC, surgió la necesidad de crear una extensión dirigida a una audiencia de 16 a 24 años, más cercana y dinámica, manteniendo su vínculo con la marca principal.",
+        "Desarrollé una dirección visual que conservaba elementos clave de la identidad de AAC, incorporando un lenguaje más contemporáneo, dinámico y pensado para entornos digitales."],
+      facts: [["role", "Estrategia de marca · Identidad visual · Logo · Tipografía · Layout · Diseño digital"], ["audience", "16–24 años"]],
+      sections: [{ n: "02 — Evolución de la marca", title: "Evolución de la marca",
+        paras: ["El sistema mantiene la conexión estructural con AAC, incorporando cambios específicos para construir una personalidad diferenciada."],
+        items: [["Logo", "Una interpretación más liviana y contemporánea del logo original."], ["Color", "Gradientes más vibrantes y contrastes más marcados aportan energía y diferenciación."], ["Tipografía", "Una dirección tipográfica más cercana acompaña el perfil de la nueva audiencia."], ["Layout", "Jerarquías más claras y composiciones más dinámicas adaptan la identidad a entornos digitales."]] }],
+      outcome: "Una extensión de marca diferenciada que mantiene su vínculo con AAC y construye un lenguaje visual más atractivo para una audiencia joven." },
+    en: { field: "Charitable giving · youth", short: "Brand extension · Identity",
+      title: "Brand extension for a younger audience",
+      overview: ["Following the AAC rebrand, the organization needed a younger, more approachable extension aimed at a 16–24 audience, while maintaining a clear connection with the parent brand.",
+        "I developed a visual direction that preserved key elements of the AAC identity while introducing a more dynamic, contemporary and digital-first language."],
+      facts: [["role", "Brand Strategy · Visual Identity · Logo · Typography · Layout · Digital Design"], ["audience", "16–24 years old"]],
+      sections: [{ n: "02 — Evolving the brand", title: "Evolving the brand",
+        paras: ["The system maintains the structural connection with AAC while introducing targeted changes to create a distinct personality."],
+        items: [["Logo", "A lighter and more contemporary treatment of the original mark."], ["Color", "More vibrant gradients and stronger contrasts introduce energy and differentiation."], ["Typography", "A more approachable typographic direction supports the younger audience."], ["Layout", "Clearer hierarchies and more dynamic compositions adapt the identity to digital environments."]] }],
+      outcome: "A distinct brand extension that remains connected to AAC while creating a more engaging visual language for younger audiences." } },
+
+  { id: "censo-2022", client: "Censo 2022", img: "08",
+    es: { field: "Gobierno nacional", short: "Adaptación digital · Motion",
+      title: "Adaptación de campaña digital",
+      overview: ["La identidad visual y la dirección creativa de la campaña se encontraban previamente definidas. Mi participación se centró en adaptar el sistema visual a distintas audiencias, formatos y plataformas digitales.",
+        "Desarrollé piezas gráficas estáticas y animadas para redes sociales y Google Ads, ajustando las jerarquías de información, los mensajes y las composiciones en función de los requerimientos de cada formato y público objetivo."],
+      facts: [["role", "Adaptación digital · Redes sociales · Google Ads · Motion"], ["formats", "Piezas estáticas · GIFs · Adaptaciones multiformato"]],
+      sections: [{ n: "02 — Adaptar un sistema a distintas audiencias", title: "Adaptar un sistema a distintas audiencias",
+        paras: ["El desafío fue mantener la consistencia visual de la campaña mientras adaptábamos su comunicación a diferentes audiencias y formatos técnicos."],
+        items: [["Redes sociales", "Piezas estáticas y animadas adaptadas a distintos formatos de contenido y necesidades de comunicación."], ["Google Ads", "Múltiples formatos y tamaños desarrollados dentro del sistema visual existente."], ["Motion", "GIFs y piezas animadas para incorporar movimiento en espacios digitales."]] }],
+      outcome: "Un conjunto flexible de piezas digitales que mantuvo la consistencia visual de la campaña en diferentes audiencias y plataformas." },
+    en: { field: "National government", short: "Digital adaptation · Motion",
+      title: "Digital campaign adaptation",
+      overview: ["The visual identity and creative direction were established beforehand. My role was to adapt the campaign across different audiences, formats and digital placements.",
+        "I translated the existing system into static and animated assets for social media and Google Ads, adjusting hierarchy, messaging and composition according to each format and audience."],
+      facts: [["role", "Digital Adaptation · Social Media · Google Ads · Motion"], ["formats", "Static Assets · GIFs · Multi-format Adaptations"]],
+      sections: [{ n: "02 — Adapting one system to different audiences", title: "Adapting one system to different audiences",
+        paras: ["The challenge was to maintain the campaign's visual consistency while adapting its communication to different audiences and technical formats."],
+        items: [["Social media", "Static and animated pieces adapted to different content formats and audience needs."], ["Google Ads", "Multiple formats and sizes developed within the existing visual system."], ["Motion", "GIFs and animated assets created to add movement to digital placements."]] }],
+      outcome: "A flexible set of digital assets that maintained the campaign's visual consistency across different audiences and platforms." } },
+
+  { id: "addevent", client: "AddEvent", img: "05",
+    es: { field: "Software", short: "Dirección de arte · Audit visual · Diseño digital", title: "Actualización de marca y dirección de arte",
+      overview: ["AddEvent presentaba inconsistencias en distintos elementos de su identidad visual, desde la paleta cromática y la iconografía hasta sus recursos gráficos.",
+        "A partir de un audit visual, desarrollé una propuesta para unificar los criterios de diseño y construir un lenguaje de marca más cohesivo, reconocible y consistente."],
+      facts: [["role", "Dirección de Arte · Audit visual · Desarrollo visual · Diseño digital · Motion Graphics · Email Marketing"], ["team", "Diseño Gráfico · Ilustración · Motion"]],
+      sections: [
+        { n: "02 — Desarrollo visual", title: "Construcción de un lenguaje visual consistente",
+          paras: ["A partir del audit, desarrollé una propuesta visual para fortalecer la identidad y mejorar la consistencia entre sus distintos elementos. Se trabajó sobre los colores, la iconografía y los recursos gráficos, estableciendo criterios que permitieran construir una presencia de marca más reconocible."],
+          items: [["Color", "Una paleta cromática definida para reforzar el reconocimiento y la consistencia de la marca."], ["Iconografía", "Un lenguaje de iconos más coherente y alineado con la identidad visual."], ["Assets gráficos", "Desarrollo de recursos visuales para ampliar las posibilidades de aplicación de la marca."], ["Ilustración", "Dirección de arte y feedback visual para integrar las ilustraciones al sistema de identidad."]] },
+        { n: "03 — Aplicaciones digitales", title: "Del lenguaje visual a sus aplicaciones",
+          paras: ["La propuesta visual se trasladó a distintos canales de comunicación, desarrollando piezas y recursos gráficos para redes sociales, email marketing y contenidos audiovisuales.",
+            "El sistema permitió mantener una presencia de marca consistente y adaptar los recursos visuales a diferentes formatos y necesidades de comunicación."],
+          items: [["Redes sociales", "Diseño de piezas gráficas para Instagram y LinkedIn, adaptadas a distintos contenidos y formatos."], ["Email marketing", "Diseño de comunicaciones por email, aplicando los recursos y criterios visuales de la marca."], ["Motion graphics", "Desarrollo conceptual, storyboards y assets gráficos para piezas animadas."]] }] },
+    en: { field: "Software", short: "Art direction · Visual audit · Digital design", title: "Brand update and art direction",
+      overview: ["AddEvent showed inconsistencies across different elements of its visual identity, from its color palette and iconography to its graphic assets.",
+        "Based on a visual audit, I developed a proposal to unify the design criteria and build a more cohesive, recognizable and consistent brand language."],
+      facts: [["role", "Art Direction · Visual Audit · Visual Development · Digital Design · Motion Graphics · Email Marketing"], ["team", "Graphic Design · Illustration · Motion"]],
+      sections: [
+        { n: "02 — Visual development", title: "Building a consistent visual language",
+          paras: ["Based on the audit, I developed a visual proposal to strengthen the identity and improve consistency across its different elements. The work covered color, iconography and graphic assets, setting criteria to build a more recognizable brand presence."],
+          items: [["Color", "A defined color palette to reinforce brand recognition and consistency."], ["Iconography", "A more coherent icon language, aligned with the visual identity."], ["Graphic assets", "Visual resources developed to widen the ways the brand can be applied."], ["Illustration", "Art direction and visual feedback to bring the illustrations into the identity system."]] },
+        { n: "03 — Digital applications", title: "From visual language to applications",
+          paras: ["The visual proposal was carried into different communication channels, with pieces and graphic assets for social media, email marketing and video content.",
+            "The system kept the brand presence consistent and let the visual resources adapt to different formats and communication needs."],
+          items: [["Social media", "Graphic pieces for Instagram and LinkedIn, adapted to different content and formats."], ["Email marketing", "Email communications that apply the brand's visual resources and criteria."], ["Motion graphics", "Concept development, storyboards and graphic assets for animated pieces."]] }] } },
+
+  { id: "strive-training", client: "Strive Training", img: "06",
+    es: { field: "Educación", short: "Desarrollo visual · Paleta cromática · Diseño digital", title: "Evolución de identidad visual y sistema gráfico",
+      overview: ["StriveTraining es una plataforma educativa orientada a la formación profesional y la empleabilidad. La marca necesitaba actualizar su lenguaje visual para mejorar la claridad de su comunicación y organizar de manera más efectiva su oferta de cursos.",
+        "Como parte del equipo de diseño, participé en el desarrollo del nuevo sistema visual, trabajando sobre la paleta cromática, las jerarquías tipográficas y los recursos gráficos para construir una identidad más consistente y adaptable a distintos entornos digitales."],
+      facts: [["role", "Desarrollo visual · Paleta cromática · Sistema tipográfico · Recursos gráficos · Diseño digital"]],
+      sections: [
+        { n: "02 — Desarrollo visual", title: "Construcción de un sistema visual flexible",
+          paras: ["El trabajo se centró en desarrollar recursos que aportaran mayor consistencia y claridad a la identidad. Se definió una nueva paleta cromática, con colores específicos para diferenciar las categorías de cursos, y se trabajó en jerarquías tipográficas, tramas y assets gráficos que ampliaran las posibilidades de aplicación del sistema."],
+          items: [["Color", "Una paleta principal más vibrante y contrastada, complementada por colores secundarios para diferenciar las categorías de cursos."], ["Tipografía", "Jerarquías y niveles de lectura más claros para mejorar la organización de la información."], ["Tramas", "Recursos gráficos que aportan dinamismo y personalidad al lenguaje visual."], ["Assets gráficos", "Elementos visuales complementarios para ampliar y dar consistencia a las aplicaciones de marca."]] },
+        { n: "03 — Aplicaciones digitales", title: "Del sistema visual a la oferta educativa",
+          paras: ["Los recursos desarrollados se aplicaron a distintos espacios de comunicación de StriveTraining, con especial atención a la presentación de los cursos y la organización de la información. El sistema permitió diferenciar categorías y mantener una comunicación visual más clara y consistente."],
+          items: [["Cursos", "Aplicación de la paleta cromática y los recursos gráficos para organizar y diferenciar las categorías de formación."], ["Web", "Adaptación de los elementos visuales y tipográficos a los distintos espacios de la plataforma."], ["Comunicación digital", "Aplicación de los recursos gráficos a piezas y contenidos digitales de la marca."]] }] },
+    en: { field: "Education", short: "Visual development · Color palette · Digital design", title: "Visual identity evolution & graphic system",
+      overview: ["StriveTraining is an education platform focused on professional training and employability. The brand needed to update its visual language to communicate more clearly and organize its course offering more effectively.",
+        "As part of the design team, I took part in developing the new visual system, working on the color palette, typographic hierarchies and graphic resources to build an identity that is more consistent and adaptable to different digital environments."],
+      facts: [["role", "Visual Development · Color Palette · Typographic System · Graphic Resources · Digital Design"]],
+      sections: [
+        { n: "02 — Visual development", title: "Building a flexible visual system",
+          paras: ["The work focused on developing resources that brought more consistency and clarity to the identity. A new color palette was defined, with specific colors to tell course categories apart, alongside typographic hierarchies, patterns and graphic assets that widened the ways the system could be applied."],
+          items: [["Color", "A more vibrant, higher-contrast main palette, complemented by secondary colors that set course categories apart."], ["Typography", "Clearer hierarchies and reading levels to better organize information."], ["Patterns", "Graphic resources that bring energy and personality to the visual language."], ["Graphic assets", "Complementary visual elements that extend the brand's applications and keep them consistent."]] },
+        { n: "03 — Digital applications", title: "From the visual system to the course offering",
+          paras: ["The resources were applied across StriveTraining's communication spaces, with particular attention to how courses are presented and information is organized. The system made it possible to tell categories apart and keep visual communication clearer and more consistent."],
+          items: [["Courses", "The color palette and graphic resources applied to organize and differentiate training categories."], ["Web", "Visual and typographic elements adapted to the different areas of the platform."], ["Digital communication", "Graphic resources applied to the brand's digital pieces and content."]] }] } },
+
+  { id: "sommos", client: "Sommos", img: "07",
+    es: { field: "Fitness", short: "Campaña digital · Paid Media · Email Marketing", title: "Campaña digital para dos audiencias",
+      overview: ["Sommos es una plataforma que conecta instructores de fitness con personas que buscan entrenadores. El desafío consistía en desarrollar una campaña digital capaz de comunicar dos propuestas de valor diferentes: atraer nuevos usuarios y captar profesionales interesados en crecer dentro de la plataforma.",
+        "La campaña se planteó a partir de líneas de comunicación diferenciadas, manteniendo una identidad visual consistente y adaptando los mensajes a las necesidades de cada audiencia."],
+      facts: [["role", "Diseño de campañas · Dirección visual · Paid Media · Social Media · Email Marketing · Diseño audiovisual"]],
+      sections: [
+        { n: "02 — Desarrollo creativo", title: "Una comunicación adaptada a cada audiencia",
+          paras: ["Se desarrollaron distintas líneas creativas para comunicar las propuestas de valor de Sommos, ajustando los mensajes, recursos visuales y llamados a la acción según cada público. El sistema mantuvo criterios consistentes de color, tipografía y composición, permitiendo diferenciar las comunicaciones sin perder unidad visual."],
+          items: [["Usuarios", "Una línea de comunicación orientada a destacar los beneficios de encontrar y conectar con instructores de fitness."], ["Instructores", "Una propuesta enfocada en las oportunidades de crecimiento y visibilidad profesional dentro de la plataforma."], ["Sistema visual", "Criterios de color, tipografía y composición para mantener la coherencia entre las distintas líneas de campaña."]] },
+        { n: "03 — Aplicaciones digitales", title: "De la estrategia a los distintos canales",
+          paras: ["La campaña se implementó en múltiples espacios digitales, desarrollando piezas y contenidos adaptados a los formatos y objetivos de cada canal. Las diferentes aplicaciones permitieron mantener una comunicación consistente y acompañar el recorrido de cada audiencia."],
+          items: [["Paid Media", "Desarrollo de piezas publicitarias con mensajes y llamados a la acción diferenciados según cada público."], ["Redes sociales", "Diseño de contenidos para comunicar las propuestas de valor de la plataforma en distintos formatos."], ["Email Marketing", "Diseño de secuencias de email alineadas a las distintas etapas del funnel de conversión."], ["Video", "Desarrollo de piezas audiovisuales promocionales para reforzar los mensajes de campaña y ampliar su alcance digital."]] }] },
+    en: { field: "Fitness", short: "Digital campaign · Paid Media · Email Marketing", title: "A digital campaign for two audiences",
+      overview: ["Sommos is a platform that connects fitness instructors with people looking for trainers. The challenge was to build a digital campaign able to communicate two different value propositions: attracting new users and bringing in professionals who want to grow on the platform.",
+        "The campaign was built on separate lines of communication, keeping a consistent visual identity while adapting the messages to the needs of each audience."],
+      facts: [["role", "Campaign Design · Visual Direction · Paid Media · Social Media · Email Marketing · Video Design"]],
+      sections: [
+        { n: "02 — Creative development", title: "Communication tailored to each audience",
+          paras: ["Several creative lines were developed to communicate Sommos' value propositions, adjusting messages, visual resources and calls to action for each audience. The system kept consistent criteria for color, typography and composition, so the communications could be told apart without losing visual unity."],
+          items: [["Users", "A line of communication that highlights the benefits of finding and connecting with fitness instructors."], ["Instructors", "A proposition focused on growth opportunities and professional visibility on the platform."], ["Visual system", "Color, typography and composition criteria that keep the campaign lines consistent with each other."]] },
+        { n: "03 — Digital applications", title: "From strategy to every channel",
+          paras: ["The campaign ran across multiple digital spaces, with pieces and content adapted to the formats and goals of each channel. These applications kept communication consistent and supported each audience's journey."],
+          items: [["Paid Media", "Ad pieces with messages and calls to action tailored to each audience."], ["Social media", "Content that communicates the platform's value propositions in different formats."], ["Email Marketing", "Email sequences aligned with the different stages of the conversion funnel."], ["Video", "Promotional video pieces that reinforce the campaign messages and extend their digital reach."]] }] } },
+
+  { id: "imhoff", client: "Imhoff & Associates", img: "09",
+    es: { field: "Servicios corporativos", short: "Presentaciones · Papelería · Diseño editorial", title: "Aplicaciones corporativas de marca",
+      overview: ["Imhoff & Associates contaba con una identidad visual previamente definida, con lineamientos establecidos para su paleta cromática, tipografía y lenguaje gráfico.",
+        "El desafío consistió en extender el sistema a nuevos soportes corporativos, asegurando una aplicación consistente de la identidad y manteniendo la calidad visual en cada pieza."],
+      facts: [["role", "Diseño editorial · Diseño de presentaciones · Papelería corporativa · Adaptación de identidad visual"]],
+      sections: [
+        { n: "02 — Desarrollo de piezas", title: "Un sistema visual aplicado a cada soporte",
+          paras: ["A partir de los lineamientos existentes, desarrollé distintas piezas corporativas, adaptando los recursos de identidad a las necesidades de cada formato. Se trabajó sobre jerarquías tipográficas, grillas y elementos gráficos para mantener una comunicación visual coherente y profesional."],
+          items: [["Presentaciones", "Desarrollo de templates corporativos con estructuras y jerarquías visuales consistentes."], ["Papelería", "Diseño de tarjetas personales y materiales institucionales alineados a la identidad de marca."], ["Recursos gráficos", "Aplicación de patrones geométricos, paleta cromática y elementos visuales definidos en los brand guidelines."]] },
+        { n: "03 — Aplicaciones corporativas", title: "La identidad en los detalles cotidianos",
+          paras: ["Los lineamientos de marca se trasladaron a distintos materiales de uso institucional y cotidiano, manteniendo una estética sobria y consistente en cada aplicación."],
+          items: [["Presentaciones corporativas", "Templates diseñados para organizar contenidos y mantener una comunicación institucional uniforme."], ["Tarjetas personales", "Diseño de tarjetas alineadas al sistema visual de la marca."], ["Materiales impresos", "Desarrollo de cuadernos institucionales y otras piezas corporativas, respetando los recursos gráficos y cromáticos existentes."]] }] },
+    en: { field: "Corporate services", short: "Presentations · Stationery · Editorial design", title: "Corporate brand applications",
+      overview: ["Imhoff & Associates already had a defined visual identity, with established guidelines for its color palette, typography and graphic language.",
+        "The challenge was to extend the system to new corporate formats, making sure the identity was applied consistently and keeping the visual quality of every piece."],
+      facts: [["role", "Editorial Design · Presentation Design · Corporate Stationery · Visual Identity Adaptation"]],
+      sections: [
+        { n: "02 — Piece development", title: "One visual system applied to every format",
+          paras: ["Working from the existing guidelines, I developed a range of corporate pieces, adapting the identity resources to the needs of each format. The work covered typographic hierarchies, grids and graphic elements to keep the visual communication coherent and professional."],
+          items: [["Presentations", "Corporate templates with consistent structures and visual hierarchies."], ["Stationery", "Business cards and institutional materials aligned with the brand identity."], ["Graphic resources", "Geometric patterns, color palette and visual elements applied as defined in the brand guidelines."]] },
+        { n: "03 — Corporate applications", title: "Identity in the everyday details",
+          paras: ["The brand guidelines were carried into a range of institutional and everyday materials, keeping a restrained, consistent look in every application."],
+          items: [["Corporate presentations", "Templates designed to organize content and keep institutional communication uniform."], ["Business cards", "Cards aligned with the brand's visual system."], ["Printed materials", "Institutional notebooks and other corporate pieces that respect the existing graphic and color resources."]] }] } },
+
+  { id: "tierra-del-fuego", client: "Tierra del Fuego", img: "10",
+    es: { field: "Gobierno provincial", short: "Comunicación institucional · Redes · Editorial", title: "Comunicación institucional y diseño digital",
+      overview: ["El Gobierno de Tierra del Fuego contaba con una identidad visual previamente definida. El proyecto consistió en extender su aplicación a diferentes piezas de comunicación institucional, tanto impresas como digitales.",
+        "El desafío fue adaptar el sistema visual a una amplia variedad de formatos y campañas, manteniendo la coherencia de marca y asegurando comunicaciones claras y accesibles para distintos públicos."],
+      facts: [["role", "Diseño gráfico · Comunicación institucional · Diseño para redes sociales · Diseño editorial · Adaptación de identidad visual"]],
+      sections: [
+        { n: "02 — Desarrollo de piezas", title: "Una identidad adaptada a distintos formatos",
+          paras: ["A partir de los lineamientos de marca existentes, desarrollé piezas de comunicación para diferentes necesidades institucionales. Se trabajó sobre la aplicación de la paleta cromática, las jerarquías tipográficas, las grillas y los recursos gráficos, priorizando la legibilidad y la consistencia visual."],
+          items: [["Diseño editorial", "Desarrollo de folletos y materiales informativos, organizando los contenidos mediante jerarquías claras y composiciones funcionales."], ["Recursos gráficos", "Aplicación de los elementos visuales de la identidad en diferentes soportes y materiales institucionales."], ["Comunicación digital", "Adaptación del sistema visual a contenidos y campañas para redes sociales, considerando las particularidades de cada formato."]] },
+        { n: "03 — Aplicaciones institucionales", title: "De la comunicación impresa a los medios digitales",
+          paras: ["La identidad se aplicó a distintos puntos de contacto institucionales, desde materiales informativos impresos hasta campañas y contenidos digitales. Cada pieza se adaptó a sus necesidades de comunicación, manteniendo una presencia visual coherente en los diferentes canales."],
+          items: [["Materiales impresos", "Diseño de folletos y piezas informativas para distintas comunicaciones institucionales."], ["Redes sociales", "Desarrollo de piezas gráficas para campañas y contenidos digitales dirigidos a diferentes públicos."], ["Mockups institucionales", "Presentación de aplicaciones de marca en distintos soportes, mostrando su implementación en contextos reales."]] }] },
+    en: { field: "Provincial government", short: "Institutional communication · Social media · Editorial", title: "Institutional communication & digital design",
+      overview: ["The Government of Tierra del Fuego already had a defined visual identity. The project extended its use to a range of institutional communication pieces, both printed and digital.",
+        "The challenge was to adapt the visual system to a wide variety of formats and campaigns, keeping the brand coherent and making communications clear and accessible for different audiences."],
+      facts: [["role", "Graphic Design · Institutional Communication · Social Media Design · Editorial Design · Visual Identity Adaptation"]],
+      sections: [
+        { n: "02 — Piece development", title: "One identity adapted to many formats",
+          paras: ["Working from the existing brand guidelines, I developed communication pieces for different institutional needs. The work covered the color palette, typographic hierarchies, grids and graphic resources, putting legibility and visual consistency first."],
+          items: [["Editorial design", "Brochures and informational materials, with content organized through clear hierarchies and functional compositions."], ["Graphic resources", "The identity's visual elements applied across different formats and institutional materials."], ["Digital communication", "The visual system adapted to social media content and campaigns, with each format's particularities in mind."]] },
+        { n: "03 — Institutional applications", title: "From print to digital media",
+          paras: ["The identity was applied across institutional touchpoints, from printed informational materials to digital campaigns and content. Each piece was adapted to its communication needs while keeping a coherent visual presence across channels."],
+          items: [["Printed materials", "Brochures and informational pieces for different institutional communications."], ["Social media", "Graphic pieces for campaigns and digital content aimed at different audiences."], ["Institutional mockups", "Brand applications shown on different formats, presenting how they work in real contexts."]] }] } },
+
+  { id: "motion", client: "Motion graphic", motion: true, draft: true, video: "video/reel.mp4", poster: "video/reel.jpg",
+    es: { field: "Animación", short: "Motion design", title: "Marcas en movimiento",
+      overview: ["Una mirada a distintos proyectos, ideas y exploraciones visuales. Desde identidades y piezas digitales hasta campañas y motion, una selección de trabajos que refleja diferentes enfoques, lenguajes y formas de resolver visualmente cada desafío."], facts: [["role", "Motion design"]] },
+    en: { field: "Animation", short: "Motion design", title: "Brands in motion",
+      overview: ["A look at different projects, ideas and visual explorations. From identities and digital pieces to campaigns and motion, a selection of work that reflects different approaches, languages and ways of solving each challenge visually."], facts: [["role", "Motion design"]] } }
+];
+
+const pad = n => String(n).padStart(2, "0");
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+let lang = "es";
+try { lang = localStorage.getItem("rb-lang") || (navigator.language || "es").slice(0, 2); } catch (e) {}
+if (!UI[lang]) lang = "es";
+
+const grid = document.getElementById("grid");
+const dlg = document.getElementById("case");
+const body = document.getElementById("case-body");
+const imgsOf = p => (p.img && IMGS[p.img]) || [];
+let current = -1;
+
+function coverHTML(p) {
+  const list = p.poster ? [p.poster] : imgsOf(p);
+  if (!list.length) {
+    return `<div class="cover motion-cover"><span class="orbit" aria-hidden="true"></span><span class="word">${p.motion ? "Motion" : esc(p.client)}</span></div>`;
+  }
+  return `<div class="cover"><img src="${list[0]}" alt="" loading="lazy"><span class="open">${UI[lang].open} ↗</span></div>`;
+}
+
+function renderGrid() {
+  grid.innerHTML = "";
+  P.forEach((p, i) => {
+    const t = p[lang];
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "card"; b.id = "card-" + p.id;
+    b.setAttribute("aria-label", `${UI[lang].open}: ${p.client}`);
+    b.innerHTML = coverHTML(p) +
+      `<div class="card-meta"><span class="num">${pad(i + 1)}</span><h3>${esc(p.client)}</h3><p>${esc(t.field)} · ${esc(t.short)}</p></div>`;
+    b.addEventListener("click", () => { location.hash = p.id; });
+    grid.appendChild(b);
+  });
+  document.getElementById("work-count").textContent = `${pad(P.length)} ${UI[lang].projects}`;
+}
+
+function renderCase(i) {
+  const p = P[i], t = p[lang], u = UI[lang];
+  const list = imgsOf(p);
+  const shot = (src, wide) => `<figure class="shot${wide ? " wide" : ""}"><img src="${src}" alt="${esc(p.client)}" loading="lazy"></figure>`;
+  let html = `<header class="case-head">
+      <div class="kicker"><span class="num">${pad(i + 1)} / ${pad(P.length)}</span><span class="label">${esc(p.client)} · ${esc(t.field)}</span></div>
+      <h2 id="case-title">${esc(t.title)}</h2>
+    </header>
+    <div class="overview">
+      <div class="paras">${t.overview.map(x => `<p>${esc(x)}</p>`).join("")}</div>
+      <dl class="facts">${t.facts.map(([k, v]) => `<div><dt>${u[k]}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+    </div>`;
+  if (list[0]) html += shot(list[0], true);
+  if (p.video) html += `<figure class="shot wide"><video src="${p.video}" poster="${p.poster}" controls playsinline preload="metadata"></video></figure>`;
+  let k = 1;
+  (t.sections || []).forEach(s => {
+    html += `<section class="section"><span class="label">${esc(s.n)}</span><h3>${esc(s.title)}</h3>
+      ${s.paras ? `<div class="paras">${s.paras.map(x => `<p>${esc(x)}</p>`).join("")}</div>` : ""}
+      ${s.items ? `<div class="items">${s.items.map(([key, h, d]) => `<div class="item"><span class="k">${esc(key)}</span>${d ? `<span class="h">${esc(h)}</span><p>${esc(d)}</p>` : `<p>${esc(h)}</p>`}</div>`).join("")}</div>` : ""}
+    </section>`;
+    if (list[k]) { html += shot(list[k], true); k++; }
+  });
+  if (t.outcome) html += `<div class="outcome"><span class="label">${u.outcome}</span><p>${esc(t.outcome)}</p></div>`;
+  const rest = list.slice(k);
+  if (rest.length) html += `<div class="gallery">${rest.map((s, j) => shot(s, rest.length % 2 === 1 && j === rest.length - 1)).join("")}</div>`;
+  const n = P[(i + 1) % P.length];
+  html += `<button type="button" class="next" id="case-next"><span class="label">${u.next}</span><span class="h">${esc(n.client)} →</span></button>`;
+  body.innerHTML = html;
+  document.getElementById("case-crumb").textContent = `${pad(i + 1)} · ${p.client}`;
+  document.getElementById("case-close").textContent = u.close;
+  document.getElementById("case-next").addEventListener("click", () => { location.hash = n.id; });
+}
+
+function openFromHash() {
+  const i = P.findIndex(p => p.id === location.hash.slice(1));
+  if (i < 0) {
+    if (dlg.open) { dlg.close(); document.documentElement.style.overflow = ""; }
+    if (current >= 0) { const c = document.getElementById("card-" + P[current].id); if (c) c.focus({ preventScroll: true }); }
+    current = -1; return;
+  }
+  current = i; renderCase(i);
+  if (!dlg.open) { dlg.showModal(); document.documentElement.style.overflow = "hidden"; }
+  dlg.scrollTop = 0;
+}
+function closeCase() {
+  if (location.hash) history.pushState(null, "", location.pathname + location.search);
+  openFromHash();
+}
+document.getElementById("case-close").addEventListener("click", closeCase);
+dlg.addEventListener("cancel", e => { e.preventDefault(); closeCase(); });
+addEventListener("hashchange", openFromHash);
+
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("rb-lang", l); } catch (e) {}
+  document.documentElement.lang = l;
+  const u = UI[l];
+  document.querySelectorAll("[data-t]").forEach(el => { el.textContent = u[el.dataset.t]; });
+  document.getElementById("hero-title").innerHTML = u.hero;
+  document.getElementById("contact-title").innerHTML = u.contact;
+  document.getElementById("cv-link").href = u.cv;
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+  renderGrid();
+  if (dlg.open && current >= 0) renderCase(current);
+  bindPills();
+}
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+/* Mouse: the lilac glow trails the cursor; the pills lean toward it. */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+const hero = document.querySelector(".hero"), glow = document.getElementById("glow");
+let gx = innerWidth * .45, gy = -innerHeight * .1, tx = gx, ty = gy, mx = -1e4, my = -1e4, pills = [];
+function bindPills() { pills = [...document.querySelectorAll(".hero .pill")]; }
+hero.addEventListener("pointermove", e => {
+  const r = hero.getBoundingClientRect();
+  tx = e.clientX - r.left - glow.offsetWidth / 2; ty = e.clientY - r.top - glow.offsetHeight / 2;
+  mx = e.clientX; my = e.clientY;
+});
+hero.addEventListener("pointerleave", () => { mx = my = -1e4; });
+function frame() {
+  if (!reduce) {
+    gx += (tx - gx) * .08; gy += (ty - gy) * .08;
+    glow.style.transform = `translate(${gx}px, ${gy}px)`;
+    if (fine) pills.forEach(el => {
+      const r = el.getBoundingClientRect();
+      const dx = mx - (r.left + r.width / 2), dy = my - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy), f = d < 260 ? (1 - d / 260) : 0;
+      el.style.transform = `translate(${dx * f * .12}px, ${dy * f * .12}px) rotate(${dx * f * .01}deg)`;
+    });
+  }
+  requestAnimationFrame(frame);
+}
+
+setLang(lang);
+openFromHash();
+requestAnimationFrame(frame);
+</script>
+
+</body>
+</html>
